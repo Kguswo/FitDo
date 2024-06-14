@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fitdo.model.dao.PostlikeDao">
+	
+	<!--게시물 좋아요 누르기-->
+	<insert id="addPostlike">
+		INSERT INTO postlike(postlike_userid, postlike_postid) 
+			values (#{postlikeUserId}, #{postlikePostId})
+	</insert>
+	
+	<!--게시물 좋아요 취소-->
+	<delete id="cancelPostlike">
+		DELETE FROM postlike 
+			WHERE postlike_userid = #{postlikeUserId} AND postlike_postid = #{postlikePostId}
+	</delete>
+	
+	<!--게시물 좋아요 여부-->
+	<select id="isPostlike" resultType="int">
+		SELECT count(*) FROM postlike 
+			WHERE postlike_userid=#{postlikeUserId} and postlike_postid=#{postlikePostId}
+	</select>
+	
+	<!--게시물 좋아요 한 유저 목록-->
+	<select id="selectPostlikeUserList" resultType="Postlike">
+		SELECT PL.postlike_id AS postlikeId, PL.postlike_userid AS postlikeUserId, PL.postlike_postid AS postlikePostId
+			FROM postlike PL
+				WHERE PL.postlike_postid = #{postlikePostId}
+	</select>
+
+	<!--게시물 좋아요 숫자-->
+	<select id="selectPostlikeNum" resultType="int">
+		SELECT COUNT(*) AS postlikeCount
+			FROM postlike
+				WHERE postlike_postid = #{postlikePostId}
+	</select>
+
+	
+</mapper>

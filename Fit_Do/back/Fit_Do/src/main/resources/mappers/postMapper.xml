@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fitdo.model.dao.PostDao">
+
+    <!-- 게시물 등록 -->
+    <insert id="createPost" parameterType="Post">
+        INSERT INTO post (post_userid, post_goalid, post_content, post_like, post_img, post_regdate)
+            VALUES (#{postUserId}, #{postGoalId}, #{postContent}, #{postLike}, #{postImg}, #{postRegDate})
+    </insert>
+
+    <!-- 게시물 전체 조회 -->
+    <select id="getPost">
+        SELECT * FROM post
+    </select>
+    
+    <!-- 게시물 전체 조회 + 프로필 사진-->
+    <select id="getPostWithUserProfileImg">
+        SELECT * FROM post
+            JOIN (
+                SELECT user_id, user_profile_img
+                    FROM user
+                 ) AS user_info ON post.post_userid = user_info.user_id
+                 ORDER BY POST_REGDATE DESC;
+    </select>
+
+    <!-- 게시물 상세 조회 -->
+    <select id="selectOnePost" parameterType="int" resultType="Post">
+        SELECT * FROM post 
+            WHERE post_id = #{postId}
+    </select>
+    
+    <!-- 유저아이디와 일치하는 게시물들 리스트 -->
+    <select id="selectPostlistByUserId" parameterType="String">
+        SELECT * FROM post 
+            WHERE post_userid = #{postUserId}
+    </select>
+    
+    <!-- 게시물을 날 팔로우하는 유저 아이디로 상세 조회 -->
+    <select id="selectPostsByUserId" parameterType="String" resultType="Post">
+        SELECT * FROM post
+            JOIN (
+                SELECT user_id, user_profile_img FROM user
+                 ) AS user_info ON post.post_userid = user_info.user_id
+                WHERE post.post_userid IN (
+                    SELECT to_userid 
+                        FROM follow 
+                               WHERE to_userid = #{postUserId}  UNION SELECT #{postUserId} )
+                               ORDER BY POST_REGDATE DESC;
+    </select>
+
+    <!-- 게시물 수정 -->
+    <update id="updatePost" parameterType="Post">
+        UPDATE post
+            SET post_content = #{postContent}, post_like = #{postLike}, post_img = #{postImg}
+                WHERE post_id = #{postId}
+    </update>
+
+    <!-- 게시물 삭제 -->
+    <delete id="deletePost" parameterType="int">
+        DELETE FROM post 
+            WHERE post_id = #{postId}
+    </delete>
+
+</mapper>

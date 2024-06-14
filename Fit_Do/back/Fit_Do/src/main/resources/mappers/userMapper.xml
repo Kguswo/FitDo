@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fitdo.model.dao.UserDao">
+
+	<!-- 회원가입 -->
+	<insert id="createUser" parameterType="User">
+		INSERT INTO user (user_id, user_password, user_birth, user_name, user_gender, user_profile_img, user_mbti)
+			VALUES (#{userid}, #{password}, #{birth}, #{name}, #{gender}, #{profileImg}, #{mbti})
+	</insert>
+
+	<!-- 로그인 -->
+	<select id="login" parameterType="String" resultType="User">
+		SELECT * FROM user 
+			WHERE user_id = #{userid} AND user_password = #{password}
+	</select>
+	
+	<!-- 중복 회원 아이디로 찾기 개수 0보다 크면 true -->
+	<select id="isExistingUser" parameterType="String" resultType="int">
+		SELECT count(*) FROM user 
+			WHERE user_id = #{userid}
+	</select>
+
+	<!-- 검색 -->
+	<select id="searchById" parameterType="String" resultType="User">
+		SELECT user_id as userid, user_birth as birth, user_name as name, user_gender as gender, user_profile_img as profileImg, user_mbti as mbti FROM user 
+			WHERE user_id = #{userid}
+	</select>
+	
+	<!-- 검색어 포함된 유저아이디 모두 검색 -->
+	<select id="searchUsersByIdToFollow" parameterType="String" resultType="User">
+		SELECT user_id as userid, user_birth as birth, user_name as name, user_gender as gender, user_profile_img as profileImg, user_mbti as mbti FROM user 
+			WHERE user_id LIKE CONCAT ('%', #{userid},'%') 
+			limit 5
+	</select>
+	
+	<!-- 추천을 위한 같은 MBTI를 가진 팔로잉 하지 않은 사용자 검색 -->
+	<select id="findUsersWithSameMbtiNotFollowing" parameterType="map" resultType="User">
+        SELECT user_id AS userid, user_birth AS birth, user_name AS name, user_gender AS gender, user_profile_img AS profileImg, user_mbti AS mbti
+        	FROM user
+        		WHERE user_mbti = #{mbti}
+           		    AND user_id != #{fromUserId}
+        			AND user_id NOT IN (
+            			SELECT to_userid FROM follow 
+            				WHERE from_userid = #{fromUserId}
+        			)
+    </select>
+    
+	<!-- 회원정보 수정 같은 MBTI를 가진 팔로잉 하지 않은 사용자 검색 -->
+	<update id="updateUser" parameterType="User">
+		UPDATE user
+		SET user_birth = #{birth}, user_name = #{name}, user_gender = #{gender}, user_profile_img = #{profileImg}, user_mbti = #{mbti}
+			WHERE user_id = #{userid}
+	</update>
+
+	<!-- 회원정보 삭제 -->
+	<delete id="deleteUser" parameterType="String">
+		DELETE FROM user 
+			WHERE user_id = #{userid}
+	</delete>
+
+</mapper>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fitdo.model.dao.GoalDao">
+
+
+	<!-- 게시물 별 전체 목표 조회 -->
+	<select id="getGoal" resultType="Goal">
+        SELECT * 
+        	FROM goal 
+        		WHERE goal_userid = #{goalUserId} AND goal_regdate = #{goalRegDate}
+    </select>
+
+	<!-- 목표아이디 별 목표 조회 -->
+	<select id="getGoalById" resultType="Goal">
+        SELECT * 
+        	FROM goal 
+        		WHERE goal_id = #{goalId}
+    </select>
+
+    <!-- 게시물 별 오늘의 목표 존재여부 -->
+    <select id="selectExistingGoal">
+        SELECT count(*) 
+        	FROM goal 
+        		WHERE goal_userid = #{goalUserId} AND goal_regdate = #{goalRegDate}
+    </select>
+
+    <!-- 목표 등록 -->
+    <insert id="createGoal" parameterType="Goal">
+        INSERT INTO goal (goal_content, goal_userid, goal_regdate)
+        	VALUES (#{goalContent}, #{goalUserId}, #{goalRegDate})
+    </insert>
+
+    <!-- 목표 수정 -->
+    <update id="updateGoal" parameterType="Goal">
+        UPDATE goal
+        	SET goal_content = #{goalContent}
+        		WHERE goal_id = #{goalId}
+    </update>
+
+    <!-- 목표 삭제 -->
+    <delete id="deleteGoal" parameterType="int">
+        DELETE 
+        	FROM goal
+        		WHERE goal_id = #{goalId}
+    </delete>
+
+</mapper>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fitdo.model.dao.FollowDao">
+	
+	<!--팔로우 하기-->
+	<insert id="follow">
+		INSERT INTO follow(from_userid, to_userid) 
+			values (#{fromUserId}, #{toUserId})
+	</insert>
+	
+	<!--언팔로우 하기-->
+	<delete id="unfollow">
+		DELETE from follow 
+			WHERE from_userid=#{fromUserId} and to_userid=#{toUserId}
+	</delete>
+	
+	<!--팔로우 유무-->
+	<select id="followState" resultType="int">
+		SELECT count(*) FROM follow 
+			WHERE from_userid=#{fromUserId} and to_userid=#{toUserId}
+	</select>
+	
+	<!--팔로잉 리스트 조회-->
+	<select id="selectFolloweeList">
+		SELECT F.follow_id AS followId, F.from_userid AS fromUserId, F.to_userid AS toUserId, U.user_id AS followeeId, U.user_profile_img AS profileImg
+			FROM follow F 
+				LEFT OUTER JOIN user U ON F.to_userid = U.id
+					WHERE F.from_userid = #{fromUserId}
+						ORDER BY F.follow_id DESC
+	</select>
+	
+	<!--팔로잉 수 조회-->
+	<select id="selectFolloweeNum" resultType="int">
+		SELECT COUNT(*) AS followeeCount
+			FROM (
+				SELECT F.follow_id AS followId, F.from_userid AS fromUserId, F.to_userid AS toUserId, U.user_id AS followeeId, U.user_profile_img AS profileImg
+					FROM follow F 
+						LEFT OUTER JOIN user U ON F.to_userid = U.id
+							WHERE F.from_userid = #{fromUserId}
+								ORDER BY F.follow_id DESC
+			) AS subquery;
+	</select>
+	
+	<!--팔로워 리스트 조회-->
+	<select id="selectFollowerList">
+		SELECT F.follow_id AS followId, F.from_userid AS fromUserId, F.to_userid AS toUserId, U.user_id AS followeeId, U.user_profile_img AS profileImg
+			FROM follow F 
+				LEFT OUTER JOIN user U ON F.to_userid = U.id
+					WHERE F.to_userid = #{fromUserId}
+						ORDER BY F.follow_id DESC
+	</select>
+
+	<!--팔로워 수 조회-->
+	<select id="selectFollowerNum" resultType="int">
+		SELECT COUNT(*) AS followeeCount
+			FROM (
+				SELECT F.follow_id AS followId, F.from_userid AS fromUserId, F.to_userid AS toUserId, U.user_id AS followeeId, U.user_profile_img AS profileImg
+					FROM follow F 
+						LEFT OUTER JOIN user U ON F.to_userid = U.id
+							WHERE F.to_userid = #{fromUserId}
+								ORDER BY F.follow_id DESC
+			) AS subquery;
+	</select>
+
+	<!--탈퇴시 팔로우삭제-->
+	
+</mapper>
