@@ -57,9 +57,8 @@
 ## 팀원소개
 | **[김현재](https://github.com/Kguswo)** | **[신승호](https://github.com/ssh2957)** |
 | :-----------------: | :-----------------: |
-| <img src="https://file.notion.so/f/f/88371250-a103-46e3-8709-b4159024125f/0c798fa0-6af9-4490-8de4-723a7be99069/Untitled.png?table=block&id=8fb98403-bfb9-41a5-b028-f6b240567682&spaceId=88371250-a103-46e3-8709-b4159024125f&expirationTimestamp=1738893600000&signature=rfr3i4_PZtvjaBsaiLd8Lkwn5dLli_AUSccXrCo4FRs&downloadName=Untitled.png" width=180px, height=180px> | <img src="https://file.notion.so/f/f/88371250-a103-46e3-8709-b4159024125f/920aa209-91c7-4c84-9a31-773bb37e9f65/Untitled.png?table=block&id=03a956bd-1b12-4a00-ba66-90a344c6c1bf&spaceId=88371250-a103-46e3-8709-b4159024125f&expirationTimestamp=1738893600000&signature=bgqUPbhT__VVIgbmFsbBU2_mOs7DADm1INYIKP5Gf74&downloadName=Untitled.png"  width=180px, height=180px> |
-| 팀장 | 팀원 |
+| <img src="https://avatars.githubusercontent.com/u/156046839?v=4" width="150" height="150"/> | <img src="https://avatars.githubusercontent.com/u/128335473?v=4" alt="신승호" width="150"> |
+| 팀원 | 팀장 |
 | BackEnd Developer (Full Stack) | FrontEnd Developer (Full Stack) |
-
 
 ---
